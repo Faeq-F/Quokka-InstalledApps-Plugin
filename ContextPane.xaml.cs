@@ -7,24 +7,25 @@ using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Plugin_InstalledApps {
-  /// <summary>
-  ///   Interaction logic for ContextPane.xaml
-  /// </summary>
 
+  /// <summary>
+  ///  The context pane for an InstalledAppsItem. Launches installed apps settings if the AllAppsItem was selected
+  /// </summary>
   public partial class ContextPane : ItemContextPane {
+
     private readonly InstalledAppsItem? Item;
 
+    /// <summary>
+    /// Grabs details about the selected app and launches settings if the selected item was the AllAppsItem
+    /// </summary>
     public ContextPane() {
       InitializeComponent();
 
       try {
-        Item = (InstalledAppsItem) ( (SearchWindow) Application.Current.MainWindow ).SelectedItem;
-      } catch (InvalidCastException) {//Used to handle the AllAppsItem
-        base.ReturnToSearch();
-
-        //Process.Start("ms-settings:appsfeatures");
-        //App.Current.MainWindow.Close();
-
+        Item = (InstalledAppsItem) ( (SearchWindow) Application.Current.MainWindow ).SelectedItem!;
+      } catch (InvalidCastException) { //Used to handle the AllAppsItem
+        Process.Start("ms-settings:appsfeatures");
+        App.Current.MainWindow.Close();
         return;
       }
       DetailsImage.Source = Item.Icon;
@@ -34,24 +35,32 @@ namespace Plugin_InstalledApps {
     }
 
     private void OpenApp(object sender, RoutedEventArgs e) {
-      Item.Execute();
+      Item!.Execute();
     }
 
     private void OpenContainingFolder(object sender, RoutedEventArgs e) {
-      using Process folderopener = new();
-      folderopener.StartInfo.FileName = "explorer";
-      folderopener.StartInfo.Arguments = Item.Path.Remove(Item.Path.LastIndexOf('\\'));
-      folderopener.Start();
-      App.Current.MainWindow.Close();
+      try {
+        using Process folderopener = new();
+        folderopener.StartInfo.FileName = (string) App.Current.Resources["FileManager"];
+        folderopener.StartInfo.Arguments = '"' + Item!.Path?.Remove(Item.Path.LastIndexOf('\\')) + '"';
+        folderopener.Start();
+        App.Current.MainWindow.Close();
+      } catch (Exception ex) { App.ShowErrorMessageBox(ex, "Containing folder could not be opened - the app may not be compatible with this action (if it is a UWP app)"); }
     }
 
-    private void Page_KeyDown(object sender, KeyEventArgs e) {
+    /// <summary>
+    /// <inheritdoc/><br />
+    /// Up and down keys select list items and the enter key executes the item's action
+    /// </summary>
+    /// <param name="sender"><inheritdoc/></param>
+    /// <param name="e"><inheritdoc/></param>
+    protected override void Page_KeyDown(object sender, KeyEventArgs e) {
       ButtonsListView.Focus();
       switch (e.Key) {
         case Key.Enter:
           if (( ButtonsListView.SelectedIndex == -1 )) ButtonsListView.SelectedIndex = 0;
-          Grid CurrentItem = ButtonsListView.SelectedItem as Grid;
-          Button CurrentButton = ( CurrentItem.Children[1] as Grid ).Children[0] as Button;
+          Grid CurrentItem = (Grid) ButtonsListView.SelectedItem;
+          Button CurrentButton = (Button) ( (Grid) CurrentItem.Children[1] ).Children[0];
           CurrentButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
           break;
 
@@ -85,23 +94,15 @@ namespace Plugin_InstalledApps {
       e.Handled = true;
     }
 
-    //still does not work
     private void RunAsAdmin(object sender, RoutedEventArgs e) {
-      //Public domain; no attribution required.
-      const int ERROR_CANCELLED = 1223; //The operation was canceled by the user.
-
-      ProcessStartInfo info = new("explorer") {
-        Arguments = @" shell:appsFolder\" + Item.Description,
-        UseShellExecute = true,
-        Verb = "runas",
-        CreateNoWindow = true
-      };
       try {
-        Process.Start(info);
-      } catch (System.ComponentModel.Win32Exception ex) {
-        if (!( ex.NativeErrorCode == ERROR_CANCELLED )) throw;
-      }
-      App.Current.MainWindow.Close();
+        Process proc = new Process();
+        proc.StartInfo.FileName = Item!.Description;
+        proc.StartInfo.UseShellExecute = true;
+        proc.StartInfo.Verb = "runas";
+        proc.Start();
+        App.Current.MainWindow.Close();
+      } catch (Exception ex) { App.ShowErrorMessageBox(ex, "App could not be launched as admin - the app may not be compatible with this action (if it is a UWP app)"); }
     }
   }
 }

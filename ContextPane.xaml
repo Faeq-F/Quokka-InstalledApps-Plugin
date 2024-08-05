@@ -14,7 +14,7 @@
   <Page.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/Plugin_InstalledApps;component/Scrollbar.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Quokka;component/SearchWindow/ScrollBar.xaml" />
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </Page.Resources>
@@ -54,11 +54,16 @@
         <Image
           x:Name="DetailsImage"
           Grid.Row="0"
+          Width="{DynamicResource ContextPaneImageSize}"
+          Height="{DynamicResource ContextPaneImageSize}"
           Margin="{DynamicResource ContextPaneImageMargin}"
-          d:Margin="40,30,40,30"
+          d:Height="32"
+          d:Margin="0,0,0,30"
           d:Source="/Plugin_InstalledApps;component/information.png"
-          RenderOptions.BitmapScalingMode="NearestNeighbor"
-          SnapsToDevicePixels="True" />
+          d:Width="32"
+          UseLayoutRounding="True" />
+
+
         <TextBlock
           x:Name="NameText"
           Grid.Row="1"
@@ -66,12 +71,13 @@
           d:FontSize="16"
           d:Margin="0,-20,0,0"
           d:Text="AppName"
-          FontFamily="{DynamicResource NameTextFont}"
+          FontFamily="{DynamicResource AppFont}"
           FontSize="{DynamicResource NameTextSize}"
           Foreground="{DynamicResource NameTextColor}"
-          SnapsToDevicePixels="True"
           Text=""
-          TextWrapping="Wrap" />
+          TextWrapping="Wrap"
+          UseLayoutRounding="True" />
+
         <TextBlock
           x:Name="DescText"
           Grid.Row="2"
@@ -79,12 +85,13 @@
           d:FontSize="12"
           d:Margin="0"
           d:Text="Made for you specifically and with love"
-          FontFamily="{DynamicResource DescTextFont}"
+          FontFamily="{DynamicResource AppFont}"
           FontSize="{DynamicResource DescTextSize}"
           Foreground="{DynamicResource DescTextColor}"
-          SnapsToDevicePixels="True"
           Text=""
-          TextWrapping="Wrap" />
+          TextWrapping="Wrap"
+          UseLayoutRounding="True" />
+
         <TextBlock
           x:Name="ExtraDetails"
           Grid.Row="3"
@@ -92,12 +99,12 @@
           d:FontSize="12"
           d:Margin="0"
           d:Text="Copyright by Faeq Faisal, blah blahblah blahblah blahblah blahblah blahblah blahblah blahblah blahblah blah, made in 2023 / 24 / 5 years ago ..."
-          FontFamily="{DynamicResource ExtraDetailsTextFont}"
+          FontFamily="{DynamicResource AppFont}"
           FontSize="{DynamicResource ExtraDetailsTextSize}"
           Foreground="{DynamicResource ExtraDetailsTextColor}"
-          SnapsToDevicePixels="True"
           Text=""
-          TextWrapping="Wrap" />
+          TextWrapping="Wrap"
+          UseLayoutRounding="True" />
       </Grid>
       <Grid Grid.Column="1" VerticalAlignment="Center">
         <ListView
@@ -121,10 +128,10 @@
                   <ControlTemplate>
                     <Rectangle
                       Margin="2"
-                      SnapsToDevicePixels="true"
                       Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
                       StrokeDashArray="1 2"
-                      StrokeThickness="0" />
+                      StrokeThickness="0"
+                      UseLayoutRounding="True" />
                   </ControlTemplate>
                 </Setter.Value>
               </Setter>
@@ -139,7 +146,7 @@
               <Setter Property="Background" Value="Transparent" />
               <Setter Property="BorderBrush" Value="Transparent" />
               <Setter Property="BorderThickness" Value="{DynamicResource ContextPaneListItemBorderThickness}" />
-              <Setter Property="SnapsToDevicePixels" Value="True" />
+              <Setter Property="UseLayoutRounding" Value="True" />
               <Setter Property="Padding" Value="4,1" />
               <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
               <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
@@ -153,11 +160,11 @@
                       Background="{TemplateBinding Background}"
                       BorderBrush="{TemplateBinding BorderBrush}"
                       BorderThickness="{TemplateBinding BorderThickness}"
-                      SnapsToDevicePixels="true">
+                      UseLayoutRounding="True">
                       <ContentPresenter
                         HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                         VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        UseLayoutRounding="{TemplateBinding UseLayoutRounding}" />
                     </Border>
                     <ControlTemplate.Triggers>
                       <MultiTrigger>
@@ -205,11 +212,11 @@
                 d:Height="25"
                 d:Margin="10,0,0,0"
                 d:Width="25"
-                RenderOptions.BitmapScalingMode="NearestNeighbor"
-                SnapsToDevicePixels="True"
-                Source="pack://siteoforigin:,,,/Config/Resources/open.png" />
+                Source="pack://siteoforigin:,,,/Config/Resources/open.png"
+                UseLayoutRounding="True" />
             </Grid>
             <Grid Grid.Column="1">
+
               <Button
                 Margin="{DynamicResource ContextPaneListItemContentMargin}"
                 Padding="{DynamicResource ContextPaneListItemTextPadding}"
@@ -220,11 +227,11 @@
                 BorderThickness="0"
                 Click="OpenApp"
                 Content="Open"
-                FontFamily="{DynamicResource ContextPaneListItemFont}"
+                FontFamily="{DynamicResource AppFont}"
                 FontSize="{DynamicResource ContextPaneListItemSize}"
                 Foreground="{DynamicResource ContextPaneListItemColor}"
-                SnapsToDevicePixels="True"
-                Style="{StaticResource TransparentStyle}" />
+                Style="{StaticResource TransparentStyle}"
+                UseLayoutRounding="True" />
             </Grid>
           </Grid>
           <Grid>
@@ -240,11 +247,11 @@
                 d:Height="26"
                 d:Margin="10,0,0,0"
                 d:Width="25"
-                RenderOptions.BitmapScalingMode="NearestNeighbor"
-                SnapsToDevicePixels="True"
-                Source="pack://siteoforigin:,,,/Config/Resources/admin.png" />
+                Source="pack://siteoforigin:,,,/Config/Resources/admin.png"
+                UseLayoutRounding="True" />
             </Grid>
             <Grid Grid.Column="1">
+
               <Button
                 Margin="{DynamicResource ContextPaneListItemContentMargin}"
                 Padding="{DynamicResource ContextPaneListItemTextPadding}"
@@ -254,11 +261,11 @@
                 BorderThickness="0"
                 Click="RunAsAdmin"
                 Content="Run as administrator"
-                FontFamily="{DynamicResource ContextPaneListItemFont}"
+                FontFamily="{DynamicResource AppFont}"
                 FontSize="{DynamicResource ContextPaneListItemSize}"
                 Foreground="{DynamicResource ContextPaneListItemColor}"
-                SnapsToDevicePixels="True"
-                Style="{StaticResource TransparentStyle}" />
+                Style="{StaticResource TransparentStyle}"
+                UseLayoutRounding="True" />
             </Grid>
           </Grid>
           <Grid>
@@ -274,11 +281,11 @@
                 d:Height="26"
                 d:Margin="10,0,0,0"
                 d:Width="26"
-                RenderOptions.BitmapScalingMode="NearestNeighbor"
-                SnapsToDevicePixels="True"
-                Source="pack://siteoforigin:,,,/Config/Resources/openFolder.png" />
+                Source="pack://siteoforigin:,,,/Config/Resources/openFolder.png"
+                UseLayoutRounding="True" />
             </Grid>
             <Grid Grid.Column="1">
+
               <Button
                 Margin="{DynamicResource ContextPaneListItemContentMargin}"
                 Padding="{DynamicResource ContextPaneListItemTextPadding}"
@@ -288,11 +295,11 @@
                 BorderThickness="0"
                 Click="OpenContainingFolder"
                 Content="Open file location"
-                FontFamily="{DynamicResource ContextPaneListItemFont}"
+                FontFamily="{DynamicResource AppFont}"
                 FontSize="{DynamicResource ContextPaneListItemSize}"
                 Foreground="{DynamicResource ContextPaneListItemColor}"
-                SnapsToDevicePixels="True"
-                Style="{StaticResource TransparentStyle}" />
+                Style="{StaticResource TransparentStyle}"
+                UseLayoutRounding="True" />
             </Grid>
           </Grid>
         </ListView>

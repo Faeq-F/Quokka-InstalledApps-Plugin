@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net4.8-windows</TargetFramework>
     <Nullable>enable</Nullable>
+    <LangVersion>10.0</LangVersion>
     <UseWPF>true</UseWPF>
     <Product>Plugin_InstalledApps</Product>
     <PublishSingleFile>true</PublishSingleFile>
@@ -16,13 +17,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="information.png" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Quokka\Quokka.csproj" />
-    <Reference Include="..\Quokka\Quokka.csproj">
-      <HintPath>..\Quokka\obj\Release\Quokka.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="ContextPane.xaml.cs">
@@ -41,6 +36,15 @@
     </ContentWithTargetPath>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="information.png" />
+    <ContentWithTargetPath Include="apps.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>apps.png</TargetPath>
+    </ContentWithTargetPath>
+  </ItemGroup>
+  <ItemGroup>
+    <ContentWithTargetPath Include="Icons By Icons8.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>Icons By Icons8.txt</TargetPath>
+    </ContentWithTargetPath>
   </ItemGroup>
 </Project>

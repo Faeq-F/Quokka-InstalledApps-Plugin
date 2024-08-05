@@ -3,7 +3,7 @@
 namespace Plugin_InstalledApps {
 
   /// <summary>
-  ///   The setting for this (Installed Apps) plugin
+  ///   The settings for this (Installed Apps) plugin
   /// </summary>
   public class Settings {
 
