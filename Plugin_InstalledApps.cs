@@ -11,7 +11,7 @@ using WinCopies.Util;
 namespace Plugin_InstalledApps {
 
   /// <summary>
-  ///   Interaction logic for plugin
+  ///  The Installed Apps plugin
   /// </summary>
   public partial class InstalledApps : IPlugger {
 
@@ -69,7 +69,7 @@ namespace Plugin_InstalledApps {
     /// <summary>
     /// <inheritdoc/>
     /// </summary>
-    /// <param name="command">The 'all apps' command (Since there is only 1 special command for this plugin)</param>
+    /// <param name="command">The AllAppsSpecialCommand from plugin settings (Since there is only 1 special command for this plugin)</param>
     /// <returns>All Apps sorted alphabetically + a shortcut to shell:appsFolder</returns>
     public List<ListItem> OnSpecialCommand(string command) {
       List<ListItem> AllList = new(ListOfSystemApps);

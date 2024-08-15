@@ -9,14 +9,14 @@ using System.Windows.Input;
 namespace Plugin_InstalledApps {
 
   /// <summary>
-  ///  The context pane for an InstalledAppsItem. Launches installed apps settings if the AllAppsItem was selected
+  ///  The context pane for an InstalledAppsItem. Launches Windows' apps and features settings, if the AllAppsItem was selected
   /// </summary>
   public partial class ContextPane : ItemContextPane {
 
     private readonly InstalledAppsItem? Item;
 
     /// <summary>
-    /// Grabs details about the selected app and launches settings if the selected item was the AllAppsItem
+    /// Grabs details about the selected item and launches Windows' apps and features settings, if the selected item was the AllAppsItem
     /// </summary>
     public ContextPane() {
       InitializeComponent();
