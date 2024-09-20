@@ -84,7 +84,7 @@ namespace Plugin_InstalledApps {
           ButtonsListView.ScrollIntoView(ButtonsListView.SelectedItem);
           break;
 
-        case Key.Apps: //This is the menu key
+        case var value when value == (System.Windows.Input.Key) App.Current.Resources["ContextPaneKey"]:
           base.ReturnToSearch();
           break;
 

@@ -14,6 +14,13 @@ namespace Plugin_InstalledApps {
     public string AllAppsSpecialCommand { get; set; } = "AllApps";
 
     /// <summary>
+    /// The command signifier to show only installed apps (defaults to "app ")<br />
+    /// Using this signifier does not change the output of this plugin, it only
+    /// ensures that no other plugins' results are included in the search window results list
+    /// </summary>
+    public string InstalledAppsSignifier { get; set; } = "app ";
+
+    /// <summary>
     ///   The size (Does not change scale) of the Icon to
     ///   render (Defaults to 'Medium'; values can be
     ///   'Small', 'Medium', 'Large', or 'ExtraLarge')
