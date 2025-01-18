@@ -2,6 +2,7 @@
 using Quokka;
 using Quokka.ListItems;
 using System.Diagnostics;
+using System.IO;
 
 namespace Plugin_InstalledApps {
 
@@ -23,17 +24,21 @@ namespace Plugin_InstalledApps {
 
       Path = app.Properties.System.Link.TargetParsingPath.Value;
       // link may be invalid or a shell link that cannot be used to get extra info
-      if (Path != null && Path.Contains(":\\")) {
-        Description = Path;
-        if (FileVersionInfo.GetVersionInfo(Path).LegalCopyright != null) {
-          ExtraDetails += FileVersionInfo.GetVersionInfo(Path).LegalCopyright + "\n";
+      try {
+        if (Path != null && Path.Contains(":\\")) {
+          Description = Path;
+          if (FileVersionInfo.GetVersionInfo(Path).LegalCopyright != null) {
+            ExtraDetails += FileVersionInfo.GetVersionInfo(Path).LegalCopyright + "\n";
+          }
+          if (FileVersionInfo.GetVersionInfo(Path).CompanyName != null) {
+            ExtraDetails += FileVersionInfo.GetVersionInfo(Path).CompanyName + "\n";
+          }
+          if (FileVersionInfo.GetVersionInfo(Path).FileVersion != null) {
+            ExtraDetails += FileVersionInfo.GetVersionInfo(Path).FileVersion + "\n";
+          }
         }
-        if (FileVersionInfo.GetVersionInfo(Path).CompanyName != null) {
-          ExtraDetails += FileVersionInfo.GetVersionInfo(Path).CompanyName + "\n";
-        }
-        if (FileVersionInfo.GetVersionInfo(Path).FileVersion != null) {
-          ExtraDetails += FileVersionInfo.GetVersionInfo(Path).FileVersion + "\n";
-        }
+      } catch (FileNotFoundException e) {
+        App.ShowErrorMessageBox(e, "Invalid link");
       }
     }
 
