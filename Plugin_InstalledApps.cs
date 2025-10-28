@@ -48,15 +48,9 @@ namespace Plugin_InstalledApps {
 
     private List<ListItem> ProduceItems(string query) {
       List<ListItem> IdentifiedApps = new();
-      //filtering apps
-      foreach (ListItem app in ListOfSystemApps) {
-        if (
-            app.Name.Contains(query, StringComparison.OrdinalIgnoreCase)
-            || ( FuzzySearch.LD(app.Name, query) < PluginSettings.FuzzySearchThreshold )
-        ) {
-          IdentifiedApps.Add(app);
-        }
-      }
+      IdentifiedApps.AddRange(
+      FuzzySearch.searchAll(query, ListOfSystemApps, PluginSettings.FuzzySearchThreshold)
+      );
       IdentifiedApps = RemoveBlacklistItems(IdentifiedApps);
       return IdentifiedApps;
     }
@@ -108,7 +102,8 @@ namespace Plugin_InstalledApps {
     /// <param name="command">The InstalledAppsSignifier (Since there is only 1 signifier for this plugin), followed by the app being searched for</param>
     /// <returns>List of InstalledApps that possibly match what is being searched for</returns>
     public override List<ListItem> OnSignifier(string command) {
-      return ProduceItems(command.Substring(PluginSettings.InstalledAppsSignifier.Length));
+      command = command.Substring(PluginSettings.InstalledAppsSignifier.Length);
+      return FuzzySearch.sort(command, ProduceItems(command)).ToList();
     }
 
   }

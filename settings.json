@@ -3,5 +3,5 @@
   "InstalledAppsSignifier": "app ",
   "IconSize": "Medium",
   "BlackList": [ "Visual Studio Installer", "Tips" ],
-  "FuzzySearchThreshold": 4
+  "FuzzySearchThreshold": 60
 }

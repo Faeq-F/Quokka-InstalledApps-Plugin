@@ -37,10 +37,9 @@ namespace Plugin_InstalledApps {
     /// <summary>
     ///   The threshold for when to consider an application
     ///   name is similar enough to the query for it to be
-    ///   displayed (defaults to 4). Currently uses the
-    ///   Levenshtein distance; the larger the number, the
-    ///   bigger the difference.
+    ///   displayed (defaults to 60). The larger the number,
+    ///   the more similar it needs to be.
     /// </summary>
-    public int FuzzySearchThreshold { get; set; } = 4;
+    public int FuzzySearchThreshold { get; set; } = 60;
   }
 }
