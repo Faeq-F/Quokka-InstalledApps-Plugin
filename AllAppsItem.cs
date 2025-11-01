@@ -1,5 +1,6 @@
 ﻿using Quokka;
 using Quokka.ListItems;
+using Quokka.PluginArch;
 using System;
 using System.Windows.Media.Imaging;
 
@@ -9,10 +10,10 @@ namespace Plugin_InstalledApps {
     public AllAppsItem() {
       Name = "Applications";
       Description = "Shortcut to shell:appsFolder. Menu key will open installed apps settings.";
-      Icon = new BitmapImage(
-          new Uri(Environment.CurrentDirectory + "\\PlugBoard\\Plugin_InstalledApps\\Plugin\\apps.png")
-      );
-      ;
+      UiDispatcher.BeginInvoke(() => {
+        Icon = new BitmapImage(
+            new Uri(Environment.CurrentDirectory + "\\PlugBoard\\Plugin_InstalledApps\\Plugin\\apps.png"));
+      });
     }
 
     public override void Execute() {

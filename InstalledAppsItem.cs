@@ -1,6 +1,7 @@
 ﻿using Microsoft.WindowsAPICodePack.Shell;
 using Quokka;
 using Quokka.ListItems;
+using Quokka.PluginArch;
 using System.Diagnostics;
 using System.IO;
 
@@ -15,12 +16,14 @@ namespace Plugin_InstalledApps {
       Name = app.Name!;
       Description = app.ParsingName; // or app.Properties.System.AppUserModel.ID
 
-      Icon = InstalledApps.PluginSettings.IconSize switch {
-        "ExtraLarge" => app.Thumbnail.ExtraLargeBitmapSource,
-        "Large" => app.Thumbnail.LargeBitmapSource,
-        "Small" => app.Thumbnail.SmallBitmapSource,
-        _ => app.Thumbnail.MediumBitmapSource,
-      };
+      UiDispatcher.BeginInvoke(() => {// Set icon on UI thread
+        Icon = InstalledApps.PluginSettings.IconSize switch {
+          "ExtraLarge" => app.Thumbnail.ExtraLargeBitmapSource,
+          "Large" => app.Thumbnail.LargeBitmapSource,
+          "Small" => app.Thumbnail.SmallBitmapSource,
+          _ => app.Thumbnail.MediumBitmapSource,
+        };
+      });
 
       Path = app.Properties.System.Link.TargetParsingPath.Value;
       // link may be invalid or a shell link that cannot be used to get extra info
