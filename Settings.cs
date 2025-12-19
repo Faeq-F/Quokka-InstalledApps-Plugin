@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-
-namespace Plugin_InstalledApps {
+﻿namespace PluginInstalledApps
+{
 
   /// <summary>
   ///   The settings for this (Installed Apps) plugin
   /// </summary>
-  public class Settings {
+  public class Settings
+  {
 
     /// <summary>
     ///   The command to show all Installed Apps found
@@ -31,8 +31,7 @@ namespace Plugin_InstalledApps {
     ///   List of application names to not show (defaults to
     ///   empty - all apps can be shown)
     /// </summary>
-    public List<string> BlackList { get; set; } =
-    new List<string>(new string[] { });
+    public List<string> BlackList { get; set; } = new List<string>(Array.Empty<string>());
 
     /// <summary>
     ///   The threshold for when to consider an application

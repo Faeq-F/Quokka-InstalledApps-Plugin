@@ -2,56 +2,60 @@ using Microsoft.WindowsAPICodePack.Shell;
 using Newtonsoft.Json;
 using Quokka.ListItems;
 using Quokka.PluginArch;
-using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using WinCopies.Util;
 
-namespace Plugin_InstalledApps {
+namespace PluginInstalledApps
+{
 
   /// <summary>
   ///  The Installed Apps plugin
   /// </summary>
-  public partial class InstalledApps : Plugin {
+  public partial class InstalledApps : Plugin
+  {
 
-    internal static List<ListItem> ListOfSystemApps { private set; get; } = new List<ListItem>();
+    internal static Collection<ListItem> AllSystemApps { private set; get; } = new();
     internal static Settings PluginSettings { get; set; } = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(Environment.CurrentDirectory
-          + "\\PlugBoard\\Plugin_InstalledApps\\Plugin\\settings.json"))!;
+          + "\\PlugBoard\\PluginInstalledApps\\Plugin\\settings.json"))!;
 
     /// <summary>
     ///  <inheritdoc/>
     /// </summary>
-    public override string PluggerName { get; set; } = "InstalledApps";
+    public override string PluginName { get; set; } = "InstalledApps";
 
 
-    private static List<ListItem> RemoveBlacklistItems(List<ListItem> list) {
-      foreach (string i in PluginSettings.BlackList) {
-        list.RemoveAll(x => x.Name.Equals(i));
+    private static Collection<ListItem> RemoveBlacklistItems(List<ListItem> list)
+    {
+      foreach (string i in PluginSettings.BlackList)
+      {
+        list.RemoveAll(x => x.Name.Equals(i, StringComparison.Ordinal));
       }
-      return list;
+      return new Collection<ListItem>(list);
     }
 
     /// <summary>
     /// <inheritdoc/>
-    /// Creates the list of all installed apps
+    /// Creates the collection of all installed apps
     /// </summary>
-    public override void OnAppStartup() {
+    public override void OnAppStartup()
+    {
       // GUID taken from https://learn.microsoft.com/en-us/windows/win32/shell/knownfolderid
       var FOLDERID_AppsFolder = new Guid("{1e87508d-89c2-42f0-8a7e-645a0f50ca58}");
       ShellObject appsFolder = (ShellObject)
           KnownFolderHelper.FromKnownFolderId(FOLDERID_AppsFolder);
 
-      foreach (var app in (IKnownFolder) appsFolder)
-        ListOfSystemApps.Add(new InstalledAppsItem(app));
+      foreach (var app in (IKnownFolder)appsFolder)
+        AllSystemApps.Add(new InstalledAppsItem(app));
     }
 
-    private List<ListItem> ProduceItems(string query) {
-      List<ListItem> IdentifiedApps = new();
+    private static Collection<ListItem> ProduceItems(string query)
+    {
+      Collection<ListItem> IdentifiedApps = new();
       IdentifiedApps.AddRange(
-      FuzzySearch.searchAll(query, ListOfSystemApps, PluginSettings.FuzzySearchThreshold)
+      FuzzySearch.SearchAll(query, AllSystemApps, PluginSettings.FuzzySearchThreshold)
       );
-      IdentifiedApps = RemoveBlacklistItems(IdentifiedApps);
+      IdentifiedApps = RemoveBlacklistItems(IdentifiedApps.ToList());
       return IdentifiedApps;
     }
 
@@ -59,8 +63,9 @@ namespace Plugin_InstalledApps {
     /// <inheritdoc />
     /// </summary>
     /// <param name="query">The app being searched for</param>
-    /// <returns>List of InstalledApps that possibly match what is being searched for</returns>
-    public override List<ListItem> OnQueryChange(string query) {
+    /// <returns>Collection of InstalledApps that possibly match what is being searched for</returns>
+    public override Collection<ListItem> OnQueryChange(string query)
+    {
       return ProduceItems(query);
     }
 
@@ -69,20 +74,21 @@ namespace Plugin_InstalledApps {
     /// </summary>
     /// <param name="command">The AllAppsSpecialCommand from plugin settings (Since there is only 1 special command for this plugin)</param>
     /// <returns>All Apps sorted alphabetically + a shortcut to shell:appsFolder</returns>
-    public override List<ListItem> OnSpecialCommand(string command) {
-      List<ListItem> AllList = new(ListOfSystemApps);
+    public override Collection<ListItem> OnSpecialCommand(string command)
+    {
+      List<ListItem> AllList = new(AllSystemApps);
       AllList = AllList.OrderBy(x => x.Name).ToList();
       AllList.Insert(0, new AllAppsItem());
-      AllList = RemoveBlacklistItems(AllList);
-      return AllList;
+      return RemoveBlacklistItems(AllList);
     }
 
     /// <summary>
     /// <inheritdoc/>
     /// </summary>
     /// <returns>The AllAppsSpecialCommand from plugin settings</returns>
-    public override List<String> SpecialCommands() {
-      List<String> SpecialCommand = new() { PluginSettings.AllAppsSpecialCommand };
+    public override Collection<String> SpecialCommands()
+    {
+      Collection<String> SpecialCommand = new() { PluginSettings.AllAppsSpecialCommand };
       return SpecialCommand;
     }
 
@@ -92,18 +98,21 @@ namespace Plugin_InstalledApps {
     /// <returns>
     /// The InstalledAppsSignifier from plugin settings
     /// </returns>
-    public override List<string> CommandSignifiers() {
-      return new List<string>() { PluginSettings.InstalledAppsSignifier };
+    public override Collection<string> CommandSignifiers()
+    {
+      return new Collection<string>() { PluginSettings.InstalledAppsSignifier };
     }
 
     /// <summary>
     /// <inheritdoc/>
     /// </summary>
     /// <param name="command">The InstalledAppsSignifier (Since there is only 1 signifier for this plugin), followed by the app being searched for</param>
-    /// <returns>List of InstalledApps that possibly match what is being searched for</returns>
-    public override List<ListItem> OnSignifier(string command) {
+    /// <returns>Collection of InstalledApps that possibly match what is being searched for</returns>
+    public override Collection<ListItem> OnSignifier(string command)
+    {
+      command ??= "";
       command = command.Substring(PluginSettings.InstalledAppsSignifier.Length);
-      return FuzzySearch.sort(command, ProduceItems(command)).ToList();
+      return FuzzySearch.Sort(command, ProduceItems(command));
     }
 
   }
